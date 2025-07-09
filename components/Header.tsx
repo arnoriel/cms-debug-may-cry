@@ -1,5 +1,7 @@
 'use client'
 
+import Image from 'next/image'
+
 export default function Header() {
   return (
     <header className="w-full bg-[#1c1c2e] text-[#00bcd4] p-4 shadow-md flex justify-between items-center">
@@ -11,10 +13,12 @@ export default function Header() {
           <p className="font-semibold text-white">Azriel</p>
           <p className="text-xs text-white opacity-50">Bug Hunter</p>
         </div>
-        <img
-          src="https://ui-avatars.com/api/?name=Azriel&background=1c1c2e&color=00bcd4&rounded=true"
+        <Image
+          src="/images/azril.png"
           alt="Profile"
-          className="w-10 h-10 rounded-full border border-[#00bcd4]"
+          width={40}
+          height={40}
+          className="rounded-full border border-[#00bcd4]"
         />
       </div>
     </header>

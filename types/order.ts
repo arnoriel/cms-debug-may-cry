@@ -6,4 +6,5 @@ export type Order = {
   created_at: string
   due_date: string | null
   status: 'unfinished' | 'finished'
+  is_notif_send: boolean
 }

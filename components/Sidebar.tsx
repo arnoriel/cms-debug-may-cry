@@ -14,7 +14,7 @@ export default function Sidebar() {
   const pathname = usePathname()
 
   return (
-    <aside className="h-screen w-60 bg-[#0f0f1b] text-[#e0e0e0] border-r border-[#263238] p-4">
+    <aside className="min-h-screen w-60 bg-[#0f0f1b] text-[#e0e0e0] border-r border-[#263238] p-4 overflow-y-auto">
       <div className="mb-6">
         <p className="text-lg font-semibold text-[#00bcd4]">Navigation</p>
       </div>

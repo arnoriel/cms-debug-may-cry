@@ -87,9 +87,12 @@ export default function OrdersPage() {
     const handleFinish = async (id: number) => {
         const { error } = await supabase
             .from('orders')
-            .update({ status: 'finished' })
+            .update({ status: 'finished', is_notif_send: false })
             .eq('id', id)
-        if (!error) fetchOrders()
+
+        if (!error) {
+            fetchOrders()
+        }
     }
 
     const filteredOrders = orders.filter(order =>
