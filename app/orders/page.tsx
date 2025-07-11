@@ -13,6 +13,7 @@ export default function OrdersPage() {
         name: '',
         price: '',
         due_date: '',
+        phone: '', // New field
     })
 
     const [currentPage, setCurrentPage] = useState(1)
@@ -42,19 +43,22 @@ export default function OrdersPage() {
         name: '',
         price: '',
         due_date: '',
+        phone: '', // New field
     })
 
     const handleAddOrder = async () => {
-        const { name, price, due_date } = newOrder
-        const newErrors = { name: '', price: '', due_date: '' }
+        const { name, price, due_date, phone } = newOrder
+        const newErrors = { name: '', price: '', due_date: '', phone: '' }
 
         if (!name) newErrors.name = 'Nama wajib diisi'
         if (!price) newErrors.price = 'Harga wajib diisi'
         if (!due_date) newErrors.due_date = 'Tanggal wajib diisi'
+        if (!phone) newErrors.phone = 'Nomor telepon wajib diisi'
+        else if (!/^[0-9]{10,15}$/.test(phone)) newErrors.phone = 'Nomor telepon harus 10-15 angka'
 
         setErrors(newErrors)
 
-        if (newErrors.name || newErrors.price || newErrors.due_date) return
+        if (newErrors.name || newErrors.price || newErrors.due_date || newErrors.phone) return
 
         const generatedOrderNumber =
             'ORD-' + Math.random().toString(36).substring(2, 10).toUpperCase()
@@ -65,18 +69,18 @@ export default function OrdersPage() {
             order_number: generatedOrderNumber,
             due_date,
             status: 'unfinished',
+            phone, // New field
         })
 
         if (error) {
             console.error('Gagal menambahkan order:', error)
         } else {
             setShowModal(false)
-            setNewOrder({ name: '', price: '', due_date: '' })
-            setErrors({ name: '', price: '', due_date: '' })
+            setNewOrder({ name: '', price: '', due_date: '', phone: '' })
+            setErrors({ name: '', price: '', due_date: '', phone: '' })
             fetchOrders()
         }
     }
-
 
     const handleDelete = async (id: number) => {
         if (!confirm('Yakin ingin menghapus order ini?')) return
@@ -104,7 +108,6 @@ export default function OrdersPage() {
         currentPage * perPage
     )
     const totalPages = Math.ceil(filteredOrders.length / perPage)
-
 
     return (
         <div className="space-y-6">
@@ -134,6 +137,7 @@ export default function OrdersPage() {
                             <th className="px-4 py-2 text-left text-white">No</th>
                             <th className="px-4 py-2 text-left text-white">Order No.</th>
                             <th className="px-4 py-2 text-left text-white">Name</th>
+                            <th className="px-4 py-2 text-left text-white">Phone</th>
                             <th className="px-4 py-2 text-left text-white">Price</th>
                             <th className="px-4 py-2 text-left text-white">Created At</th>
                             <th className="px-4 py-2 text-left text-white">Due Date</th>
@@ -144,13 +148,13 @@ export default function OrdersPage() {
                     <tbody>
                         {loading ? (
                             <tr>
-                                <td colSpan={8} className="text-center p-4 text-gray-400">
+                                <td colSpan={9} className="text-center p-4 text-gray-400">
                                     Loading...
                                 </td>
                             </tr>
                         ) : paginatedOrders.length === 0 ? (
                             <tr>
-                                <td colSpan={8} className="text-center p-4 text-gray-400">
+                                <td colSpan={9} className="text-center p-4 text-gray-400">
                                     Tidak ada data order.
                                 </td>
                             </tr>
@@ -165,6 +169,7 @@ export default function OrdersPage() {
                                     </td>
                                     <td className="px-4 py-2 text-white">{order.order_number}</td>
                                     <td className="px-4 py-2 text-white">{order.name}</td>
+                                    <td className="px-4 py-2 text-white">{order.phone}</td>
                                     <td className="px-4 py-2 text-white">
                                         Rp {Number(order.price).toLocaleString('id-ID')}
                                     </td>
@@ -254,6 +259,21 @@ export default function OrdersPage() {
                                     value={newOrder.price}
                                     onChange={(e) => setNewOrder({ ...newOrder, price: e.target.value })}
                                     className="w-full p-2 rounded bg-[#12151c] border border-[#263238] text-white"
+                                />
+                            </div>
+
+                            <div>
+                                <label className="text-sm font-medium text-white">
+                                    Nomor Telepon
+                                    {errors.phone && <span className="text-red-500 ml-2 text-xs">{errors.phone}</span>}
+                                </label>
+                                <input
+                                    type="tel"
+                                    value={newOrder.phone}
+                                    onChange={(e) => setNewOrder({ ...newOrder, phone: e.target.value })}
+                                    className="w-full p-2 rounded bg-[#12151c] border border-[#263238] text-white"
+                                    pattern="[0-9]{10,15}"
+                                    title="Nomor telepon harus 10-15 angka"
                                 />
                             </div>
 
